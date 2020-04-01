@@ -5,6 +5,7 @@ import { studentChange, studentCreate } from '../actions'
 import Card from './Card'
 import Button from './Button'
 import CardSection from './CardSection'
+import Spinner from './Spinner'
 
 
 class StudentCreate extends Component {
@@ -14,8 +15,20 @@ class StudentCreate extends Component {
         this.props.studentCreate({ studentName, studentSurname, studentNumber, branch})
     }
 
+    renderContents(){
+        if(!this.props.loading){
+            return (
+                <Button onPress={this.clickSave.bind(this)}>Kaydet</Button>
+            );
+        }else{
+            return(
+                <Spinner size = "small"/>
+            );
+        }
+    }
+
     render() {
-        const {inputStyle} = styles;
+        const { inputStyle } = styles;
         return (
             <Card>
                 <CardSection>
@@ -23,7 +36,7 @@ class StudentCreate extends Component {
                         style={inputStyle} 
                         placeholder="isim"
                         value={this.props.studentName} 
-                        onChangeText={studentName => this.props.studentChange({props:'studentName',value:studentName})}
+                        onChangeText= { studentName => this.props.studentChange({ props: 'studentName', value: studentName })}
                     />
                 </CardSection>
                 <CardSection>
@@ -46,7 +59,7 @@ class StudentCreate extends Component {
                     <Text>Şube</Text>
                     <Picker
                         style={{flex:1}} 
-                        selectedValue={this.props.studentBranch}
+                        selectedValue={this.props.branch}
                         onValueChange={branch=>this.props.studentChange({props:'branch',value:branch})}>
                         <Picker.Item label="A Şubesi" value="abranch" />
                         <Picker.Item label="B Şubesi" value="bbranch" />
@@ -56,7 +69,7 @@ class StudentCreate extends Component {
                 </CardSection>
                     
                 <CardSection>
-                <Button onPress={this.clickSave.bind(this)}>Kaydet</Button>
+                    { this.renderContents() }
                 </CardSection>
             </Card>
         )
@@ -75,8 +88,19 @@ const styles = {
 }
 
 const mapToStateProps=({studentResponse})=>{
-    const {studentName,studentSurname,studentNumber,branch}=studentResponse;
-    return{studentName,studentSurname,studentNumber,branch};
+    const { studentName,
+            studentSurname,
+            studentNumber,
+            branch,
+            loading
+        } = studentResponse;
+    return {
+             studentName,
+             studentSurname,
+             studentNumber,
+             branch,
+             loading
+            };
 }
 
 export default connect(mapToStateProps, { studentChange, studentCreate })(StudentCreate);

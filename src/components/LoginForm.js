@@ -7,7 +7,7 @@ import Button from './Button'
 import Card from './Card'
 import CardSection from './CardSection'
 import Spinner from './Spinner'
-import { emailChanged, passwordChanged,loginUser} from '../actions'
+import { emailChanged, passwordChanged,loginUser} from '../actions' // import actions , so can use with props...
 
 
 class LoginForm extends Component {
@@ -41,8 +41,6 @@ class LoginForm extends Component {
     }
 
     render() {
-        console.log('email response: ' + this.props.email);
-        console.log('password response: ' + this.props.email);
         const {containerStyle, subContainerStyle, inputStyle} = styles;
         return (
             <View style={{flex:1,backgroundColor:'white'}}>
@@ -53,7 +51,7 @@ class LoginForm extends Component {
                             style={inputStyle} 
                             placeholder="E-mail"
                             value={this.props.email} 
-                            onChangeText={email => this.props.emailChanged(email)}
+                            onChangeText={email => this.props.emailChanged(email)} //trigger emailChanged action
                         />
                     </CardSection>
 
@@ -105,4 +103,4 @@ const mapStateToProps = ({kimlikdogrulamaResponse}) => {
     };
 };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged,loginUser })(LoginForm);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginForm);

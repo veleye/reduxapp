@@ -1,15 +1,38 @@
+import _ from 'lodash'
 import React, { Component } from 'react'
-import {View,Text} from 'react-native'
+import { FlatList  } from 'react-native'
+import { connect } from 'react-redux'
+import { getStudentList } from '../actions'
+import ListItem from './ListItem'
 
-export default class StudentList extends Component {
+class StudentList extends Component {
+
+    UNSAFE_componentWillMount() {
+        this.props.getStudentList();
+    }
+
+
+    renderRow({ item, index }) {
+        return <ListItem student = { item } />
+
+    }
+
     render() {
         return (
-            <View>
-                <Text>Öğrenci Listesi</Text>
-                <Text>Öğrenci Listesi</Text>
-                <Text>Öğrenci Listesi</Text>
-                <Text>Öğrenci Listesi</Text>
-            </View>
+            <FlatList
+                data={this.props.studentRecords}
+                renderItem={this.renderRow}
+                keyExtractor={( item, index ) => index.toString()}
+            />
         )
     }
 }
+
+const mapStateToProps = ({ studentResponse }) => {
+    const studentRecords = _.map(studentResponse, (val, uid) => {
+        return { ...val, uid };
+    });
+    return { studentRecords }; // {studentName:'erkan', studentSurname:'obut', branch.... , uid: 'qwerty...'}
+}
+
+export default connect(mapStateToProps, { getStudentList })(StudentList)
